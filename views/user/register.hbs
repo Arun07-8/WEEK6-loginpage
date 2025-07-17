@@ -1,0 +1,105 @@
+   <link rel="stylesheet" type="text/css" href="/styles/userlogin.css">
+   <link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+	        
+      <div class="main">  
+    <div class="signup">
+         
+         {{!-- <input type="text" id="message" value="{{{message}}}" name="message"> --}}
+        <form id="registrationForm" action="/user/register" method="post">
+           <input type="hidden"  id="mes" value="{{{message}}}" >
+            <label for="username" aria-hidden="true">Sign up</label>
+            <input id="username" type="text" name="username" placeholder="User name">
+            <span id="usernameError" class="error-message"></span>  <!-- Error message container -->
+            <input id="email" type="email" name="email" placeholder="Email">
+            <span id="emailError" class="error-message"></span>  <!-- Error message container -->
+            <input id="password" type="password" name="password" placeholder="Password">
+            <span id="passwordError" class="error-message"></span>  <!-- Error message container -->
+            <input id="confpassw" type="password" name="confirmPassword" placeholder="Confirm Password">
+            <span id="confpasswError" class="error-message"></span>  <!-- Error message container -->
+            <button type="submit">Sign up</button>
+
+        </form>
+			<div class="login-register">
+            <p>You have an account?<a href="/user/login" class="register-link"><button class="btn" type="submit">Login</button></a></p>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.3/dist/sweetalert2.all.min.js"></script>
+<script>
+ 
+   const message=document.getElementById('mes').value
+if(message){
+        swal.fire(message)
+}
+   
+     document.getElementById('registrationForm').addEventListener('submit', function(event) {
+       ; // Prevent form submission for validation
+
+ 
+    const email = document.getElementById('email');
+    const password = document.getElementById('password');
+    const confirmPassword = document.getElementById('confpassw');
+
+    // Clear previous error messages
+    document.getElementById('usernameError').innerText = '';
+    document.getElementById('emailError').innerText = '';
+    document.getElementById('passwordError').innerText = '';
+    document.getElementById('confpasswError').innerText = '';
+
+    // Reset input field error styles
+    username.classList.remove('error');
+    email.classList.remove('error');
+    password.classList.remove('error');
+    confirmPassword.classList.remove('error');
+
+    let valid = true;
+    // Validate Username
+    if (username.value.trim() === '') {
+		
+        document.getElementById('usernameError').innerText = 'Username is required';
+        username.classList.add('error');
+        valid = false;
+    }
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Validate Email
+    if (email.value.trim() === '') {
+        document.getElementById('emailError').innerText = 'Email is required';
+        email.classList.add('error');
+        valid = false;
+    }else if (!emailRegex.test(email.value.trim())) {
+            document.getElementById('emailError').innerText = 'Please enter a valid email address';
+            email.classList.add('error');
+            valid = false;
+    }
+    // Validate Password
+    if (password.value.length < 7) {
+        document.getElementById('passwordError').innerText = 'Password must be at least 7 characters';
+        password.classList.add('error');
+        valid = false;
+    }
+    // Validate Confirm Password
+    if (confirmPassword.value.trim() === '') {
+        document.getElementById('confpasswError').innerText = 'Confirm password is required';
+        confirmPassword.classList.add('error');
+        valid = false;
+    }
+    // Validate Password Match
+    if (password.value !== confirmPassword.value) {
+        document.getElementById('passwordError').innerText = 'Passwords do not match';
+        document.getElementById('confpasswError').innerText = 'Passwords do not match';
+        password.classList.add('error');
+        confirmPassword.classList.add('error');
+        valid = false;
+    }
+    // If validation fails, stop form submission
+    if (!valid) {
+		event.preventDefault()
+        return false;
+		
+    }
+
+});
+</script>
+
+		

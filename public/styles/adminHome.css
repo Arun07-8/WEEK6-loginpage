@@ -1,0 +1,12 @@
+.button{
+    width: 15em;
+}
+.input{
+    width: 29.5em;
+}
+.inputbox{
+    height: 2.3em;
+    width: 15em;
+    border-radius: 1em;
+    margin-right: .5em;
+}

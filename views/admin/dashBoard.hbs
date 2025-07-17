@@ -1,0 +1,164 @@
+<link rel="stylesheet" href="/stylesheets/adminHome.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<nav class="navbar navbar-expand-lg bg-light
+">
+  <div class="container-fluid bg-light ">
+    <a class="navbar-brand text-center" href="#" >Admin Dashboard</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+      </ul>
+      <form class="d-flex" action="/admin/logout" method="post">
+        <button class="btn btn-danger">LOGOUT</button>
+      </form>
+    </div>
+  </div>
+</nav>
+<div class="container-fluid">
+  <div class="row">
+    <span>
+      <h1 class="text-center">USER MANAGEMENT</h1><button type="button" class="btn btn-success my-2" data-bs-toggle="modal"
+        data-bs-target="#addUserModal">
+        Add User
+      </button>
+        {{#if msg}}
+      <div class="alert alert-success d-flex justify-content-center" role="alert">
+      {{msg}}
+      </div>
+      {{/if}}
+      <form action="/admin/search" method="post" class="d-flex justify-content-end">
+        <input type="text" class="inputbox" name="username">
+        <button class="btn btn-success my-1">Search</button>
+      </form>
+    </span>
+
+  </div>
+</div>
+<div class="container-fluid bg-light">
+  <div class="row">
+    <div class="col-12">
+      <table class="table table-striped table-hover">
+        <thead>
+          <tr class="bg-warning">
+            <th scope="col" class="text-bg-secondary">#</th>
+            <th scope="col" class="text-bg-secondary">Username</th>
+            <th scope="col" class="text-bg-secondary">Email</th>
+            <th scope="col" class="text-bg-secondary">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each users}}
+            <tr class="justify-content-center">
+            <th scope="row">{{@index}}</th>
+            <td>{{this.username}}</td>
+            <td>{{this.email}}</td>
+            <td class="button"><button class="me-5 bg-success text-white rounded-3" 
+             onclick="openEditUser('{{this._id}}','{{this.email}}')">EDIT</button>
+              <button class="bg-danger text-white rounded-3" onclick="deleteUser('{{this.email}}')">DELETE</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{{!-- Adding user through admin --}}
+
+<div class="modal fade" id="addUserModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/add-user" method="post">
+          <label for="">Username</label><br>
+          <input type="text" name="username" class="input"><br>
+          <label for="">Email</label><br>
+          <input type="email" name="email" class="input"><br>
+          <label for="">Password</label><br>
+          <input type="password" name="password" class="input"><br>
+          <button class="btn btn-primary my-1">Save changes</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- Editing user details --}}
+<div class="modal" id="editUserModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/edit-user" method="post">
+          <label for="">Username</label><br>
+          <input type="text" name="username" class="input" required><br>
+          <label for="">Email</label>
+          <input type="email" name="email" id="email" class="input" readonly><br>
+          <label for="">Password</label><br>
+          <input type="text" name="password" id="password" class="input" required><br>
+          <button class="btn btn-primary mt-3">Save changes</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{!-- deleteUser --}}
+<div class="modal" id="deleteUserModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit User</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/admin/delete-user" method="post">
+          <input type="hidden" id="id" name="email">
+          <h4>Do you want to delete this user?</h4>
+          <button class="btn btn-danger mt-3">Delete</button>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  function openEditUser(userid, useremail, password) {
+
+    document.getElementById('email').value = useremail;
+
+    var modal = new bootstrap.Modal(document.getElementById('editUserModal'));
+    modal.show();
+  }
+
+  function deleteUser(useremail) {
+    document.getElementById('id').value = useremail;
+
+    var modal = new bootstrap.Modal(document.getElementById('deleteUserModal'));
+    modal.show();
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
